@@ -13,7 +13,7 @@ const Services = () => {
     { title: 'Weddings', icon: '💍', desc: 'Elegant spaces for your dream wedding celebration.' },
     { title: 'Birthdays', icon: '🎂', desc: 'Joyful setups and catering for memorable birthdays.' },
     { title: 'Corporate Events', icon: '💼', desc: 'Professional environments with top-tier AV support.' },
-    { title: 'Banquets', icon: '🍽️', desc: 'Grand feasts in our luxurious banquet halls.' }
+
   ];
 
   return (
@@ -34,7 +34,7 @@ const Services = () => {
 
 const Facilities = () => {
   const facilities = [
-    'Grand Ballroom', 'Valet Parking', 'Bridal Suite', 'AV & Lighting', 'Outdoor Garden', 'Exclusive Bar'
+    'Valet Parking', 'Bridal Suite', 'AV & Lighting', 'Outdoor Garden'
   ];
 
   return (
@@ -98,7 +98,7 @@ const Menu = () => {
         </div>
       </div>
       <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-        <button className="btn-primary">Download Full Menu <ArrowRight size={18} style={{ verticalAlign: 'middle', marginLeft: '5px' }}/></button>
+        <button className="btn-primary">Download Full Menu <ArrowRight size={18} style={{ verticalAlign: 'middle', marginLeft: '5px' }} /></button>
       </div>
     </section>
   );
@@ -142,11 +142,11 @@ const Testimonials = () => {
         {reviews.map((r, i) => (
           <div key={i} className="float-card testimonial-card">
             <div className="stars">
-              <Star fill="currentColor" size={24}/>
-              <Star fill="currentColor" size={24}/>
-              <Star fill="currentColor" size={24}/>
-              <Star fill="currentColor" size={24}/>
-              <Star fill="currentColor" size={24}/>
+              <Star fill="currentColor" size={24} />
+              <Star fill="currentColor" size={24} />
+              <Star fill="currentColor" size={24} />
+              <Star fill="currentColor" size={24} />
+              <Star fill="currentColor" size={24} />
             </div>
             <p className="testimonial-text">"{r.text}"</p>
             <p className="testimonial-author">- {r.author}</p>
@@ -170,7 +170,7 @@ const Statistics = () => {
         <div className="stat-label">Grand Halls</div>
       </div>
       <div className="stat-item">
-        <div className="stat-number count-up" data-target="15">0</div>
+        <div className="stat-number count-up" data-target="5">0</div>
         <div className="stat-label">Years Excellence</div>
       </div>
     </div>
@@ -179,14 +179,36 @@ const Statistics = () => {
 
 const BookNow = () => {
   const [status, setStatus] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setStatus('Sending...');
-    setTimeout(() => {
-      setStatus('Success! We will contact you shortly to confirm your booking.');
-      e.target.reset();
-    }, 1500);
+    const formData = new FormData(event.target);
+    formData.append("access_key", "88022166-38dd-404c-832f-7ff89b4cee77");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setStatus('');
+        setShowSuccess(true);
+        event.target.reset();
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 5000);
+      } else {
+        setStatus('Error: Could not send message.');
+        setTimeout(() => setStatus(''), 4000);
+      }
+    } catch (error) {
+      setStatus('Error: Something went wrong.');
+      setTimeout(() => setStatus(''), 4000);
+    }
   };
 
   return (
@@ -197,34 +219,34 @@ const BookNow = () => {
           <div className="form-group">
             <div style={{ display: 'flex', gap: '1rem' }}>
               <div style={{ flex: 1 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><User size={16}/> Name</label>
-                <input type="text" required placeholder="John Doe" />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><User size={16} /> Name</label>
+                <input type="text" name="name" required placeholder="John Doe" />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Phone size={16}/> Phone</label>
-                <input type="tel" required placeholder="+91 98765 43210" />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Phone size={16} /> Phone</label>
+                <input type="tel" name="phone" required placeholder="+91 98765 43210" />
               </div>
             </div>
           </div>
           <div className="form-group">
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Mail size={16}/> Email</label>
-            <input type="email" required placeholder="john@example.com" />
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Mail size={16} /> Email</label>
+            <input type="email" name="email" required placeholder="john@example.com" />
           </div>
           <div className="form-group">
             <div style={{ display: 'flex', gap: '1rem' }}>
               <div style={{ flex: 1 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Calendar size={16}/> Event Date</label>
-                <input type="date" required />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Calendar size={16} /> Event Date</label>
+                <input type="date" name="event_date" required />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Users size={16}/> Guests Count</label>
-                <input type="number" required placeholder="500" min="50" max="2000" />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><Users size={16} /> Guests Count</label>
+                <input type="number" name="guests" required placeholder="500" min="50" max="2000" />
               </div>
             </div>
           </div>
           <div className="form-group">
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>Event Type</label>
-            <select required>
+            <select name="event_type" required>
               <option value="">Select Event Type</option>
               <option value="wedding">Wedding</option>
               <option value="birthday">Birthday</option>
@@ -234,20 +256,208 @@ const BookNow = () => {
             </select>
           </div>
           <div className="form-group">
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><MessageSquare size={16}/> Message</label>
-            <textarea rows="4" placeholder="Any specific requirements?"></textarea>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}><MessageSquare size={16} /> Message</label>
+            <textarea name="message" rows="4" placeholder="Any specific requirements?"></textarea>
           </div>
-          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
-            {status === 'Sending...' ? 'Sending...' : 'Submit Request'}
+
+          <button
+            type="submit"
+            className={`btn-primary btn-submit-anim${status === 'Sending...' ? ' btn-loading' : ''}`}
+            style={{ width: '100%', position: 'relative', overflow: 'hidden' }}
+          >
+            {status === 'Sending...' ? 'Sending...' : (
+              <span className="btn-submit-text">🚀 Submit Request</span>
+            )}
           </button>
-          
+
+          {/* Error message */}
           {status && status !== 'Sending...' && (
-            <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(19,115,51,0.2)', color: '#5bb974', borderRadius: '8px', textAlign: 'center' }}>
-              {status}
+            <div className="form-error-msg">
+              ⚠️ {status}
+            </div>
+          )}
+
+          {/* Inline Success Animation */}
+          {showSuccess && (
+            <div className="inline-success-card">
+              <div className="confetti-wrapper">
+                {[...Array(12)].map((_, i) => (
+                  <span key={i} className={`confetti-dot dot-${i}`}></span>
+                ))}
+              </div>
+              <div className="success-check-wrap">
+                <svg className="success-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                  <circle className="success-circle" cx="26" cy="26" r="25" fill="none" />
+                  <path className="success-tick" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                </svg>
+              </div>
+              <h3 className="inline-success-title">Thank you! 🎉</h3>
+              <p className="inline-success-text">
+                Your form has been submitted successfully.<br />
+                <strong>We will contact you soon.</strong>
+              </p>
+              <div className="success-timer-bar"></div>
             </div>
           )}
         </form>
       </div>
+
+      <style>{`
+        /* Error Message */
+        .form-error-msg {
+          margin-top: 1rem;
+          padding: 0.9rem 1.2rem;
+          background: linear-gradient(135deg, rgba(180,30,30,0.25), rgba(200,50,50,0.15));
+          border: 1px solid rgba(220,60,60,0.4);
+          color: #ff7b7b;
+          border-radius: 10px;
+          text-align: center;
+          font-weight: 600;
+          animation: shakeIn 0.5s ease;
+        }
+
+        @keyframes shakeIn {
+          0%,100% { transform: translateX(0); }
+          20% { transform: translateX(-8px); }
+          40% { transform: translateX(8px); }
+          60% { transform: translateX(-5px); }
+          80% { transform: translateX(5px); }
+        }
+
+        /* Inline Success Card */
+        .inline-success-card {
+          position: relative;
+          margin-top: 1.5rem;
+          padding: 2rem 1.5rem;
+          border-radius: 18px;
+          background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(16,185,129,0.08));
+          border: 1px solid rgba(34,197,94,0.35);
+          text-align: center;
+          overflow: hidden;
+          animation: successCardIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes successCardIn {
+          0%   { opacity: 0; transform: translateY(30px) scale(0.92); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Confetti Dots */
+        .confetti-wrapper {
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .confetti-dot {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          animation: confettiFly 2s ease-out forwards;
+          opacity: 0;
+        }
+
+        .dot-0  { background: #f43f5e; top: 60%; left: 10%; animation-delay: 0.1s; }
+        .dot-1  { background: #f59e0b; top: 50%; left: 20%; animation-delay: 0.2s; }
+        .dot-2  { background: #22d3ee; top: 70%; left: 30%; animation-delay: 0.15s; }
+        .dot-3  { background: #a78bfa; top: 55%; left: 45%; animation-delay: 0.25s; }
+        .dot-4  { background: #34d399; top: 65%; left: 60%; animation-delay: 0.1s; }
+        .dot-5  { background: #fb923c; top: 50%; left: 75%; animation-delay: 0.3s; }
+        .dot-6  { background: #f43f5e; top: 60%; left: 88%; animation-delay: 0.2s; }
+        .dot-7  { background: #818cf8; top: 40%; left: 15%; animation-delay: 0.35s; }
+        .dot-8  { background: #4ade80; top: 45%; left: 50%; animation-delay: 0.05s; }
+        .dot-9  { background: #f59e0b; top: 35%; left: 70%; animation-delay: 0.4s; }
+        .dot-10 { background: #22d3ee; top: 55%; left: 35%; animation-delay: 0.28s; }
+        .dot-11 { background: #f472b6; top: 40%; left: 80%; animation-delay: 0.18s; }
+
+        @keyframes confettiFly {
+          0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+          100% { opacity: 0; transform: translateY(-120px) rotate(720deg) scale(0.5); }
+        }
+
+        /* Animated Checkmark */
+        .success-check-wrap {
+          width: 72px;
+          height: 72px;
+          margin: 0 auto 1rem;
+        }
+
+        .success-svg {
+          width: 72px;
+          height: 72px;
+          display: block;
+        }
+
+        .success-circle {
+          stroke-dasharray: 166;
+          stroke-dashoffset: 166;
+          stroke-width: 2.5;
+          stroke: #22c55e;
+          animation: drawCircle 0.7s cubic-bezier(0.65,0,0.45,1) 0.3s forwards;
+        }
+
+        .success-tick {
+          stroke-dasharray: 48;
+          stroke-dashoffset: 48;
+          stroke-width: 2.5;
+          stroke: #22c55e;
+          stroke-linecap: round;
+          animation: drawTick 0.4s cubic-bezier(0.65,0,0.45,1) 0.9s forwards;
+        }
+
+        @keyframes drawCircle {
+          to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes drawTick {
+          to { stroke-dashoffset: 0; }
+        }
+
+        /* Text */
+        .inline-success-title {
+          font-size: 1.6rem;
+          background: linear-gradient(to right, #22c55e, #4ade80, #86efac);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 0.5rem;
+          animation: fadeSlideUp 0.6s ease 1.1s both;
+        }
+
+        .inline-success-text {
+          font-size: 1rem;
+          color: rgba(255,255,255,0.8);
+          line-height: 1.6;
+          animation: fadeSlideUp 0.6s ease 1.3s both;
+        }
+
+        [data-theme="ethereal"] .inline-success-text,
+        [data-theme="mesh"] .inline-success-text {
+          color: rgba(0,0,0,0.7);
+        }
+
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Timer bar — shrinks from 100% to 0 over 5s */
+        .success-timer-bar {
+          margin-top: 1.2rem;
+          height: 3px;
+          border-radius: 99px;
+          background: linear-gradient(to right, #22c55e, #4ade80);
+          animation: timerShrink 5s linear forwards;
+          transform-origin: left;
+        }
+
+        @keyframes timerShrink {
+          from { transform: scaleX(1); }
+          to   { transform: scaleX(0); }
+        }
+      `}</style>
     </section>
   );
 };
@@ -260,9 +470,9 @@ const Footer = () => {
           <h3>11 HALL</h3>
           <p style={{ color: 'var(--text-light)', marginBottom: '1.5rem', lineHeight: 1.6 }}>Where celebrations become timeless. Experience luxury and antigravity aesthetics in the heart of Chennai.</p>
           <ul className="footer-links" style={{ display: 'flex', gap: '1rem' }}>
-            <li><a href="#"><Phone size={20}/></a></li>
-            <li><a href="#"><Mail size={20}/></a></li>
-            <li><a href="#"><MapPin size={20}/></a></li>
+            <li><a href="#"><Phone size={20} /></a></li>
+            <li><a href="#"><Mail size={20} /></a></li>
+            <li><a href="https://maps.app.goo.gl/C62ZTVpdiM3AGeAp9"><MapPin size={20} /></a></li>
           </ul>
         </div>
         <div className="footer-col">
@@ -275,23 +485,21 @@ const Footer = () => {
             <li><a href="#book-now">Book Your Event</a></li>
           </ul>
         </div>
-        <div className="footer-col footer-map">
+        <div className="footer-col footer-map" style={{ display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ color: 'var(--text-main)', fontSize: '1.2rem' }}>Location</h3>
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.986835153406!2d80.1837651!3d13.0676451!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266b0266cf293%3A0x8f7d88c2fb821038!2sChinmaya%20Nagar%20Stage%201%2C%20Chinmaya%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin" 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
-        <div className="footer-col">
-          <h3 style={{ color: 'var(--text-main)', fontSize: '1.2rem' }}>Newsletter</h3>
-          <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>Subscribe for exclusive offers and updates.</p>
-          <div className="subscribe-form">
-            <input type="email" placeholder="Email Address" />
-            <button>Join</button>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '1rem' }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.5750247135875!2d80.19592257508704!3d13.062700912874373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266b0ab8651f5%3A0x9664fca1234d14f3!2s11%20HALL%20Convention%20Centre!5e0!3m2!1sen!2sin!4v1780981279596!5m2!1sen!2sin"
+              width="100%"
+              height="200"
+              style={{ border: 0, borderRadius: '8px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
         </div>
+
       </div>
       <div className="footer-bottom">
         <p>&copy; {new Date().getFullYear()} 11 HALL Convention Centre. All rights reserved.</p>
@@ -312,7 +520,7 @@ export default function App() {
   const [theme, setTheme] = useState('midnight');
   const [activeSection, setActiveSection] = useState('home');
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
-  
+
   const heroRef = useRef(null);
   const cursorDotRef = useRef(null);
   const cursorRingRef = useRef(null);
@@ -325,7 +533,7 @@ export default function App() {
     // Custom Cursor Logic
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
-      
+
       // Hero Parallax
       if (heroRef.current) {
         const x = (clientX / window.innerWidth - 0.5) * 20;
@@ -337,7 +545,7 @@ export default function App() {
       if (cursorDotRef.current) {
         gsap.to(cursorDotRef.current, { x: clientX, y: clientY, duration: 0, ease: 'none' });
       }
-      
+
       // Cursor Ring (trailing)
       if (cursorRingRef.current) {
         gsap.to(cursorRingRef.current, { x: clientX, y: clientY, duration: 0.15, ease: 'power2.out' });
@@ -347,11 +555,11 @@ export default function App() {
     window.addEventListener('mousemove', handleMouseMove);
 
     // Initial floating hero animation
-    gsap.fromTo('.hero-levitate', 
-      { y: 30, opacity: 0 }, 
+    gsap.fromTo('.hero-levitate',
+      { y: 30, opacity: 0 },
       { y: -10, opacity: 1, duration: 2, ease: 'power2.out' }
     );
-    
+
     gsap.to('.hero-levitate', {
       y: 10,
       duration: 2.5,
@@ -385,7 +593,7 @@ export default function App() {
             innerHTML: target,
             duration: 2,
             snap: { innerHTML: 1 },
-            onUpdate: function() {
+            onUpdate: function () {
               counter.innerHTML = Math.round(this.targets()[0].innerHTML) + (target === 500 || target === 15 ? "+" : "");
             }
           });
@@ -397,11 +605,11 @@ export default function App() {
     // ScrollTrigger reveals for generic sections
     const sections = gsap.utils.toArray('.gsap-section');
     sections.forEach((sec) => {
-      gsap.fromTo(sec, 
+      gsap.fromTo(sec,
         { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
+        {
+          opacity: 1,
+          y: 0,
           duration: 1,
           scrollTrigger: {
             trigger: sec,
@@ -448,7 +656,7 @@ export default function App() {
       <div className="scroll-progress-bar" style={{ scaleX: 0 }}></div>
 
       <div className="watermark">11 HALL Convention Centre</div>
-      
+
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', zIndex: -1 }}>
         <Canvas>
           <ThreeScene theme={theme} />
@@ -463,8 +671,8 @@ export default function App() {
               const id = item.toLowerCase().replace(' ', '-');
               return (
                 <li key={item}>
-                  <a 
-                    href={`#${id}`} 
+                  <a
+                    href={`#${id}`}
                     className={activeSection === id ? 'active' : ''}
                     onClick={(e) => { e.preventDefault(); scrollTo(id); }}
                   >
@@ -480,7 +688,7 @@ export default function App() {
       <main>
         <section id="home" className="gsap-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
           <div className="hero-content" ref={heroRef}>
-            <h1 className="hero-title hero-levitate">11 HALL<br/><span>Convention Centre</span></h1>
+            <h1 className="hero-title hero-levitate">11 HALL<br /><span>Convention Centre</span></h1>
             <h2 className="hero-subtitle">Where Celebrations Become Timeless</h2>
             <p className="hero-address">
               <MapPin size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} />
@@ -504,7 +712,7 @@ export default function App() {
       <div className="theme-picker">
         <div className={`theme-list ${isThemeMenuOpen ? 'open' : ''}`}>
           {THEMES.map(t => (
-            <button 
+            <button
               key={t.id}
               className={`theme-option ${theme === t.id ? 'active' : ''}`}
               onClick={() => {
@@ -516,13 +724,13 @@ export default function App() {
             </button>
           ))}
         </div>
-        <button 
-          className="theme-btn" 
+        <button
+          className="theme-btn"
           onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
         >
-          <Palette size={20} /> 
-          Theme 
-          <ChevronUp size={16} style={{ transform: isThemeMenuOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }}/>
+          <Palette size={20} />
+          Theme
+          <ChevronUp size={16} style={{ transform: isThemeMenuOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
         </button>
       </div>
     </>

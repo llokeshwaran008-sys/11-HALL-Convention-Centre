@@ -645,6 +645,109 @@ footer {
   box-shadow: 0 0 0 3px var(--gold-glow);
 }
 
+.form-group option {
+  background: var(--bg-color);
+  color: var(--text-main);
+}
+
+/* Button Animations */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Submit Button Premium Animation */
+.btn-submit-anim {
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s !important;
+  letter-spacing: 1px;
+}
+
+.btn-submit-anim:hover:not(.btn-loading) {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 16px 35px var(--gold-glow), 0 0 20px var(--gold-glow) !important;
+  filter: brightness(1.15);
+}
+
+.btn-submit-anim:active:not(.btn-loading) {
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 4px 10px var(--gold-glow) !important;
+}
+
+.btn-submit-anim::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.btn-submit-anim:active::before {
+  width: 400px;
+  height: 400px;
+  opacity: 0;
+}
+
+.btn-submit-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: letter-spacing 0.3s ease;
+}
+
+.btn-submit-anim:hover .btn-submit-text {
+  letter-spacing: 2px;
+}
+
+/* Fix dropdown text visibility */
+select option {
+  background-color: #0a1128 !important;
+  color: #f8f9fa !important;
+  font-size: 1rem;
+  padding: 8px;
+}
+
+[data-theme="mesh"] select option,
+[data-theme="ethereal"] select option {
+  background-color: #ffffff !important;
+  color: #2d3436 !important;
+}
+
+[data-theme="liquid"] select option {
+  background-color: #1a1a1a !important;
+  color: #f5deb3 !important;
+}
+
+[data-theme="starry"] select option {
+  background-color: #1a0b1c !important;
+  color: #e0d8e3 !important;
+}
+
 /* Utilities */
 .gsap-reveal {
   opacity: 0;
