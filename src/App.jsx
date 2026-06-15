@@ -6,6 +6,18 @@ import { Palette, MapPin, Calendar, Users, MessageSquare, Phone, Mail, User, Che
 import ThreeScene from './components/ThreeScene';
 import './index.css';
 
+// Side parallax images (wedding/event themed)
+const SIDE_IMAGES = {
+  left: [
+    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400&q=80',
+    'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=400&q=80',
+  ],
+  right: [
+    'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=400&q=80',
+    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=400&q=80',
+  ],
+};
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Services = () => {
@@ -520,14 +532,35 @@ export default function App() {
   const [theme, setTheme] = useState('midnight');
   const [activeSection, setActiveSection] = useState('home');
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [navShrunk, setNavShrunk] = useState(false);
+  const [confettiBurst, setConfettiBurst] = useState(false);
 
   const heroRef = useRef(null);
   const cursorDotRef = useRef(null);
   const cursorRingRef = useRef(null);
+  const leftPanelRef = useRef(null);
+  const rightPanelRef = useRef(null);
+  const leftPanelDeepRef = useRef(null);
+  const rightPanelDeepRef = useRef(null);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    setIsMenuOpen(false);
   }, [theme]);
+
+  // Navbar shrink on scroll
+  useEffect(() => {
+    const onScroll = () => setNavShrunk(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Confetti burst helper
+  const fireConfetti = () => {
+    setConfettiBurst(true);
+    setTimeout(() => setConfettiBurst(false), 2200);
+  };
 
   useEffect(() => {
     // Custom Cursor Logic
@@ -539,6 +572,23 @@ export default function App() {
         const x = (clientX / window.innerWidth - 0.5) * 20;
         const y = (clientY / window.innerHeight - 0.5) * 20;
         gsap.to(heroRef.current, { x: x, y: y, duration: 1, ease: 'power2.out' });
+      }
+
+      // Side Panel Parallax — Layer 1 (shallow)
+      const nx = clientX / window.innerWidth - 0.5;
+      const ny = clientY / window.innerHeight - 0.5;
+      if (leftPanelRef.current) {
+        gsap.to(leftPanelRef.current, { x: nx * -30, y: ny * 25, duration: 1.2, ease: 'power2.out' });
+      }
+      if (rightPanelRef.current) {
+        gsap.to(rightPanelRef.current, { x: nx * 30, y: ny * 25, duration: 1.2, ease: 'power2.out' });
+      }
+      // Side Panel Parallax — Layer 2 (deep)
+      if (leftPanelDeepRef.current) {
+        gsap.to(leftPanelDeepRef.current, { x: nx * -55, y: ny * 45, duration: 1.8, ease: 'power2.out' });
+      }
+      if (rightPanelDeepRef.current) {
+        gsap.to(rightPanelDeepRef.current, { x: nx * 55, y: ny * 45, duration: 1.8, ease: 'power2.out' });
       }
 
       // Cursor Dot (immediate)
@@ -663,9 +713,11 @@ export default function App() {
         </Canvas>
       </div>
 
-      <nav>
+      <nav className={navShrunk ? 'nav-shrunk' : ''}>
         <div className="nav-container">
-          <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('home'); }} className="nav-logo">11 HALL</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('home'); setIsMenuOpen(false); }} className="nav-logo">11 HALL</a>
+
+          {/* Desktop links */}
           <ul className="nav-links">
             {['Home', 'Services', 'Facilities', 'Menu', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
               const id = item.toLowerCase().replace(' ', '-');
@@ -682,11 +734,39 @@ export default function App() {
               );
             })}
           </ul>
+
+          {/* Hamburger Button (mobile) */}
+          <button
+            className={`hamburger-btn ${isMenuOpen ? 'open' : ''}`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle navigation"
+          >
+            <span /><span /><span />
+          </button>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+          {['Home', 'Services', 'Facilities', 'Menu', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
+            const id = item.toLowerCase().replace(' ', '-');
+            return (
+              <a
+                key={item}
+                href={`#${id}`}
+                className={activeSection === id ? 'active' : ''}
+                onClick={(e) => { e.preventDefault(); scrollTo(id); setIsMenuOpen(false); }}
+              >
+                {item}
+              </a>
+            );
+          })}
         </div>
       </nav>
 
       <main>
-        <section id="home" className="gsap-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+        <section id="home" className="gsap-section hero-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+
+          {/* HERO CENTRE CONTENT */}
           <div className="hero-content" ref={heroRef}>
             <h1 className="hero-title hero-levitate">11 HALL<br /><span>Convention Centre</span></h1>
             <h2 className="hero-subtitle">Where Celebrations Become Timeless</h2>
@@ -694,8 +774,35 @@ export default function App() {
               <MapPin size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} />
               No: 07, VV Koil St, Chinmaya Nagar, Chennai, Tamil Nadu 600092
             </p>
-            <button className="btn-primary" onClick={() => scrollTo('book-now')}>Book Now</button>
+
+            {/* CTA Buttons row */}
+            <div className="hero-btns">
+              <button
+                className="btn-primary"
+                onClick={() => { scrollTo('book-now'); fireConfetti(); }}
+              >
+                Book Now
+              </button>
+              <a
+                href="https://maps.app.goo.gl/C62ZTVpdiM3AGeAp9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-tour"
+              >
+                <span className="tour-icon">🔮</span> 360° Virtual Tour
+              </a>
+            </div>
+
+            {/* Confetti burst */}
+            {confettiBurst && (
+              <div className="confetti-hero-wrapper" aria-hidden="true">
+                {[...Array(22)].map((_, i) => (
+                  <span key={i} className={`ch-dot ch-dot-${i}`} />
+                ))}
+              </div>
+            )}
           </div>
+
         </section>
 
         <Statistics />
@@ -733,6 +840,20 @@ export default function App() {
           <ChevronUp size={16} style={{ transform: isThemeMenuOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
         </button>
       </div>
+
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20book%2011%20HALL%20Convention%20Centre"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="whatsapp-fab"
+        aria-label="Chat on WhatsApp"
+      >
+        <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor">
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.773L0 32l8.459-2.012A15.937 15.937 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.827-1.883l-.489-.291-5.022 1.194 1.216-4.898-.317-.504A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.878c-.398-.199-2.354-1.162-2.719-1.294-.365-.133-.631-.199-.897.199-.266.398-1.029 1.294-1.261 1.56-.232.266-.465.299-.863.1-.398-.199-1.681-.62-3.201-1.978-1.183-1.057-1.981-2.363-2.213-2.761-.232-.398-.025-.613.174-.811.179-.178.398-.465.597-.698.199-.232.266-.398.398-.664.133-.266.067-.498-.033-.697-.1-.199-.897-2.163-1.229-2.962-.324-.778-.653-.673-.897-.685l-.764-.013c-.266 0-.697.1-.1063.498-.365.398-1.396 1.362-1.396 3.32 0 1.957 1.428 3.849 1.627 4.115.199.266 2.811 4.289 6.813 6.014.953.411 1.696.656 2.275.84.956.304 1.826.261 2.514.158.767-.114 2.354-.962 2.686-1.892.332-.93.332-1.727.232-1.892-.1-.166-.365-.266-.763-.465z"/>
+        </svg>
+        <span className="whatsapp-label">WhatsApp</span>
+      </a>
     </>
   );
 }
