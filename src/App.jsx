@@ -64,57 +64,6 @@ const Facilities = () => {
   );
 };
 
-const Menu = () => {
-  const vegItems = [
-    { name: 'Veg Meals', desc: 'Traditional multi-course feast served on a banana leaf.', price: '₹450', img: 'https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?auto=format&fit=crop&w=150&q=80' },
-    { name: 'Paneer Butter Masala', desc: 'Creamy tomato gravy with fresh cottage cheese.', price: '₹320', img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=150&q=80' },
-  ];
-
-  const nonVegItems = [
-    { name: 'Mutton Biryani', desc: 'Authentic dum style biryani cooked with tender meat.', price: '₹480', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=150&q=80' },
-    { name: 'Butter Chicken', desc: 'Tender chicken cooked in a smooth buttery gravy.', price: '₹380', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=150&q=80' },
-  ];
-
-  return (
-    <section id="menu" className="gsap-section" style={{ maxWidth: '1200px' }}>
-      <h2 className="section-title">Exquisite <span>Menu</span></h2>
-      <div className="grid-2">
-        {/* Left Column: Veg */}
-        <div>
-          <h3 className="menu-column-title">🌿 Vegetarian Feast</h3>
-          {vegItems.map((item, i) => (
-            <div key={i} className="menu-item-card">
-              <img src={item.img} alt={item.name} className="menu-item-img" />
-              <div className="menu-item-info">
-                <h4>{item.name}</h4>
-                <p>{item.desc}</p>
-                <div className="menu-price">{item.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Right Column: Non-Veg */}
-        <div>
-          <h3 className="menu-column-title">🍗 Non-Veg Signature</h3>
-          {nonVegItems.map((item, i) => (
-            <div key={i} className="menu-item-card">
-              <img src={item.img} alt={item.name} className="menu-item-img" />
-              <div className="menu-item-info">
-                <h4>{item.name}</h4>
-                <p>{item.desc}</p>
-                <div className="menu-price">{item.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-        <button className="btn-primary">Download Full Menu <ArrowRight size={18} style={{ verticalAlign: 'middle', marginLeft: '5px' }} /></button>
-      </div>
-    </section>
-  );
-};
 
 const Gallery = () => {
   const images = [
@@ -492,7 +441,6 @@ const Footer = () => {
           <ul className="footer-links">
             <li><a href="#services">Our Services</a></li>
             <li><a href="#facilities">Facilities</a></li>
-            <li><a href="#menu">Exquisite Menu</a></li>
             <li><a href="#gallery">Event Gallery</a></li>
             <li><a href="#book-now">Book Your Event</a></li>
           </ul>
@@ -527,6 +475,101 @@ const THEMES = [
   { id: 'liquid', name: '4. Liquid Gold' },
   { id: 'starry', name: '5. Starry Constellation' }
 ];
+
+const CalendarView = () => {
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dates = Array.from({ length: 30 }, (_, i) => i + 1);
+  return (
+    <section id="calendar" className="gsap-section">
+      <h2 className="section-title">Availability <span>Calendar</span></h2>
+      <div className="float-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <h3>Upcoming Dates</h3>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <span style={{ fontSize: '0.9rem' }}><span style={{ color: '#22c55e' }}>●</span> Available</span>
+            <span style={{ fontSize: '0.9rem' }}><span style={{ color: '#ef4444' }}>●</span> Booked</span>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', textAlign: 'center' }}>
+          {days.map(d => <div key={d} style={{ fontWeight: 'bold', color: 'var(--gold-primary)' }}>{d}</div>)}
+          {dates.map(d => {
+            const isBooked = [5, 12, 18, 19, 25, 26, 28].includes(d);
+            return (
+              <div key={d} style={{
+                padding: '10px',
+                borderRadius: '8px',
+                background: isBooked ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)',
+                border: `1px solid ${isBooked ? 'rgba(239, 68, 68, 0.3)' : 'rgba(34, 197, 94, 0.3)'}`,
+                color: 'var(--text-main)'
+              }}>
+                {d}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ThingsToKnow = () => {
+  return (
+    <section id="things-to-know" className="gsap-section">
+      <h2 className="section-title">Things to <span>Know</span></h2>
+      <div className="grid-3">
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Timings & Slots</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• Morning: 6:00 AM – 2:00 PM</li>
+            <li>• Evening: 4:00 PM – 10:00 PM</li>
+            <li>• Full Day: 6:00 AM – 10:00 PM</li>
+          </ul>
+        </div>
+
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Parking</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• Valet provided by venue: Yes</li>
+            <li>• Parking space available for 50 vehicles</li>
+          </ul>
+        </div>
+
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Rooms & AC</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• No of AC rooms: 2</li>
+            <li>• Common area A/C: Yes</li>
+            <li>• Hall A/C: No</li>
+          </ul>
+        </div>
+
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Decoration & Ent.</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• Outside decorators: Not allowed</li>
+            <li>• Outside vendors: No</li>
+            <li>• Outside entertainment: Not allowed</li>
+          </ul>
+        </div>
+
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Facilities</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• WiFi: Available</li>
+            <li>• Generator backup: Yes</li>
+          </ul>
+        </div>
+
+        <div className="float-card">
+          <h3 style={{ color: 'var(--gold-primary)', marginBottom: '1rem' }}>Terms & Conditions</h3>
+          <ul style={{ listStyle: 'none', lineHeight: '1.8' }}>
+            <li>• Standard venue policies apply</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default function App() {
   const [theme, setTheme] = useState('midnight');
@@ -715,11 +758,13 @@ export default function App() {
 
       <nav className={navShrunk ? 'nav-shrunk' : ''}>
         <div className="nav-container">
-          <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('home'); setIsMenuOpen(false); }} className="nav-logo">11 HALL</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('home'); setIsMenuOpen(false); }} className="nav-logo">
+
+          </a>
 
           {/* Desktop links */}
           <ul className="nav-links">
-            {['Home', 'Services', 'Facilities', 'Menu', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
+            {['Home', 'Services', 'Facilities', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
               const id = item.toLowerCase().replace(' ', '-');
               return (
                 <li key={item}>
@@ -747,7 +792,7 @@ export default function App() {
 
         {/* Mobile Dropdown Menu */}
         <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
-          {['Home', 'Services', 'Facilities', 'Menu', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
+          {['Home', 'Services', 'Facilities', 'Gallery', 'Reviews', 'Book Now'].map((item) => {
             const id = item.toLowerCase().replace(' ', '-');
             return (
               <a
@@ -764,10 +809,15 @@ export default function App() {
       </nav>
 
       <main>
-        <section id="home" className="gsap-section hero-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-
+        <section id="home" className="gsap-section hero-section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+            <video autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}>
+              <source src="https://cdn.pixabay.com/video/2023/10/22/186005-876935634_large.mp4" type="video/mp4" />
+            </video>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, transparent, var(--bg-color))', zIndex: 1 }}></div>
+          </div>
           {/* HERO CENTRE CONTENT */}
-          <div className="hero-content" ref={heroRef}>
+          <div className="hero-content" ref={heroRef} style={{ zIndex: 2 }}>
             <h1 className="hero-title hero-levitate">11 HALL<br /><span>Convention Centre</span></h1>
             <h2 className="hero-subtitle">Where Celebrations Become Timeless</h2>
             <p className="hero-address">
@@ -808,9 +858,10 @@ export default function App() {
         <Statistics />
         <Services />
         <Facilities />
-        <Menu />
         <Gallery />
         <Testimonials />
+        <CalendarView />
+        <ThingsToKnow />
         <BookNow />
       </main>
 
@@ -843,14 +894,14 @@ export default function App() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20book%2011%20HALL%20Convention%20Centre"
+        href="https://wa.me/919500803720?text=Hi%2C%20I%20would%20like%20to%20book%2011%20HALL%20Convention%20Centre"
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-fab"
         aria-label="Chat on WhatsApp"
       >
         <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor">
-          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.773L0 32l8.459-2.012A15.937 15.937 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.827-1.883l-.489-.291-5.022 1.194 1.216-4.898-.317-.504A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.878c-.398-.199-2.354-1.162-2.719-1.294-.365-.133-.631-.199-.897.199-.266.398-1.029 1.294-1.261 1.56-.232.266-.465.299-.863.1-.398-.199-1.681-.62-3.201-1.978-1.183-1.057-1.981-2.363-2.213-2.761-.232-.398-.025-.613.174-.811.179-.178.398-.465.597-.698.199-.232.266-.398.398-.664.133-.266.067-.498-.033-.697-.1-.199-.897-2.163-1.229-2.962-.324-.778-.653-.673-.897-.685l-.764-.013c-.266 0-.697.1-.1063.498-.365.398-1.396 1.362-1.396 3.32 0 1.957 1.428 3.849 1.627 4.115.199.266 2.811 4.289 6.813 6.014.953.411 1.696.656 2.275.84.956.304 1.826.261 2.514.158.767-.114 2.354-.962 2.686-1.892.332-.93.332-1.727.232-1.892-.1-.166-.365-.266-.763-.465z"/>
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.469 2.027 7.773L0 32l8.459-2.012A15.937 15.937 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.827-1.883l-.489-.291-5.022 1.194 1.216-4.898-.317-.504A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.878c-.398-.199-2.354-1.162-2.719-1.294-.365-.133-.631-.199-.897.199-.266.398-1.029 1.294-1.261 1.56-.232.266-.465.299-.863.1-.398-.199-1.681-.62-3.201-1.978-1.183-1.057-1.981-2.363-2.213-2.761-.232-.398-.025-.613.174-.811.179-.178.398-.465.597-.698.199-.232.266-.398.398-.664.133-.266.067-.498-.033-.697-.1-.199-.897-2.163-1.229-2.962-.324-.778-.653-.673-.897-.685l-.764-.013c-.266 0-.697.1-.1063.498-.365.398-1.396 1.362-1.396 3.32 0 1.957 1.428 3.849 1.627 4.115.199.266 2.811 4.289 6.813 6.014.953.411 1.696.656 2.275.84.956.304 1.826.261 2.514.158.767-.114 2.354-.962 2.686-1.892.332-.93.332-1.727.232-1.892-.1-.166-.365-.266-.763-.465z" />
         </svg>
         <span className="whatsapp-label">WhatsApp</span>
       </a>
