@@ -493,7 +493,7 @@ const CalendarView = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', textAlign: 'center' }}>
           {days.map(d => <div key={d} style={{ fontWeight: 'bold', color: 'var(--gold-primary)' }}>{d}</div>)}
           {dates.map(d => {
-            const isBooked = [5, 12, 18, 19, 25, 26, 28].includes(d);
+            const isBooked = [5, 10, 12, 17, 18, 19, 21, 28].includes(d);
             return (
               <div key={d} style={{
                 padding: '10px',
