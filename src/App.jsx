@@ -46,7 +46,7 @@ const Services = () => {
 
 const Facilities = () => {
   const facilities = [
-    'Valet Parking', 'Bridal Suite', 'AV & Lighting', 'Outdoor Garden'
+    'Valet Parking', 'Bridal Suite', 'AV & Lighting'
   ];
 
   return (
@@ -67,13 +67,14 @@ const Facilities = () => {
 
 const Gallery = () => {
   const images = [
-    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80'
+    '/6.png',
+    '/hall2.png',
+    '/hall6.png',
+    '/hall7.png',
+    '/hall5.png',
+    '/5.png'
   ];
+  // Gallery -------------------------------------------------------------
 
   return (
     <section id="gallery" className="gsap-section">
@@ -476,41 +477,7 @@ const THEMES = [
   { id: 'starry', name: '5. Starry Constellation' }
 ];
 
-const CalendarView = () => {
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dates = Array.from({ length: 30 }, (_, i) => i + 1);
-  return (
-    <section id="calendar" className="gsap-section">
-      <h2 className="section-title">Availability <span>Calendar</span></h2>
-      <div className="float-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h3>Upcoming Dates</h3>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <span style={{ fontSize: '0.9rem' }}><span style={{ color: '#22c55e' }}>●</span> Available</span>
-            <span style={{ fontSize: '0.9rem' }}><span style={{ color: '#ef4444' }}>●</span> Booked</span>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', textAlign: 'center' }}>
-          {days.map(d => <div key={d} style={{ fontWeight: 'bold', color: 'var(--gold-primary)' }}>{d}</div>)}
-          {dates.map(d => {
-            const isBooked = [5, 10, 12, 17, 18, 19, 21, 28].includes(d);
-            return (
-              <div key={d} style={{
-                padding: '10px',
-                borderRadius: '8px',
-                background: isBooked ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)',
-                border: `1px solid ${isBooked ? 'rgba(239, 68, 68, 0.3)' : 'rgba(34, 197, 94, 0.3)'}`,
-                color: 'var(--text-main)'
-              }}>
-                {d}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
+
 
 const ThingsToKnow = () => {
   return (
@@ -825,6 +792,7 @@ export default function App() {
               No: 07, VV Koil St, Chinmaya Nagar, Chennai, Tamil Nadu 600092
             </p>
 
+
             {/* CTA Buttons row */}
             <div className="hero-btns">
               <button
@@ -833,14 +801,7 @@ export default function App() {
               >
                 Book Now
               </button>
-              <a
-                href="https://maps.app.goo.gl/C62ZTVpdiM3AGeAp9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-tour"
-              >
-                <span className="tour-icon">🔮</span> 360° Virtual Tour
-              </a>
+
             </div>
 
             {/* Confetti burst */}
@@ -860,7 +821,6 @@ export default function App() {
         <Facilities />
         <Gallery />
         <Testimonials />
-        <CalendarView />
         <ThingsToKnow />
         <BookNow />
       </main>
